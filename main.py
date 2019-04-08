@@ -3,7 +3,7 @@ from exercises.daily_coding_problems import *
 
 if __name__ == "__main__":
 
-    p = Problem31()
+    p = Problem40()
     p.test()
 
     def _printing_portion():
