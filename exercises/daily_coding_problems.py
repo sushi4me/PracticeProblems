@@ -6,6 +6,7 @@ from exercises.exercise_problems import ExerciseProblem
 class DailyCodingProblem(ExerciseProblem):
 
     def __init__(self, diff=None):
+        super(DailyCodingProblem, self).__init__()
         self.difficulty = diff
 
     def test(self):
@@ -15,9 +16,62 @@ class DailyCodingProblem(ExerciseProblem):
         raise NotImplementedException
 
 
+# Regular Expression Matching
+class Problem25(DailyCodingProblem):
+
+    def __init__(self):
+        super(Problem25, self).__init__()
+        self.difficulty = 'Hard'
+
+    def test(self):
+        s = 'ccha'
+        regex = 'c*hat'
+        print("s={0}, regex={1}, result={2}".format(s, regex, self.execute(s=s, regex=regex)))
+
+    @staticmethod
+    def matches_first_char(s, r):
+        return s[0] == r[0] or (r[0] == '.' and len(s) > 0)
+
+    def execute(self, **kwargs):
+        regex = kwargs['regex']
+        s = kwargs['s']
+
+        # Base cases
+        if s == '' and len(regex) != 0:
+            # There are no characters left in s but there are some remaining in regex, make sure that it contains no
+            # more than 2 characters and * is used since it allows for length zero
+            return len(regex) <= 2 and '*' in regex
+
+        if regex == '':
+            return s == ''
+
+        # If the character is not proceeded by * then we can keep recursively verifying the next substring after
+        # checking the current character
+        if len(regex) == 1 or regex[1] != '*':
+            if self.matches_first_char(s, regex):
+                return self.execute(s=s[1:], regex=regex[1:])
+            else:
+                return False
+        else:
+            # Check to see if we match the case in which * is zero length
+            if self.execute(s=s, regex=regex[2:]):
+                return True
+
+            # Make sure the first characters match then pass on the remainder of the s and everything of regex after *.
+            i = 0
+            while self.matches_first_char(s[i:], regex):
+                if self.execute(s=s[i + 1:], regex=regex[2:]):
+                    return True
+                i += 1
+
+            return False
+
+
+# Removing k-Last Element from Linked List
 class Problem26(DailyCodingProblem):
 
     def __init__(self):
+        super(Problem26, self).__init__()
         self.difficulty = 'Medium'
 
     def test(self):
@@ -49,9 +103,11 @@ class Problem26(DailyCodingProblem):
         prev.next = slow.next
 
 
+# Balanced Brackets
 class Problem27(DailyCodingProblem):
 
     def __init__(self):
+        super(Problem27, self).__init__()
         self.brackets = {')': '(', ']': '[', '}': '{'}
 
     def test(self):
@@ -73,10 +129,11 @@ class Problem27(DailyCodingProblem):
         return True
 
 
+# Word Wrap
 class Problem28(DailyCodingProblem):
 
     def __init__(self):
-        pass
+        super(Problem28, self).__init__()
 
     def test(self):
         list_of_words = ['hello', 'there', 'bye']
@@ -112,10 +169,11 @@ class Problem28(DailyCodingProblem):
         return current_list
 
 
+# Encoding String
 class Problem29(DailyCodingProblem):
 
     def __init__(self):
-        pass
+        super(Problem29, self).__init__()
 
     def test(self):
         raw_string = 'AAABBBCCDA'
@@ -142,7 +200,7 @@ class Problem29(DailyCodingProblem):
                     encoded_string += str(current[1]) + current[0]
                     current = (char, 1)
             # Print the last element
-            encoded_string += str(current[1]) + current[0]
+            encoded_string += str(current[1]) + str(current[0])
 
             return encoded_string
 
@@ -164,6 +222,7 @@ class Problem29(DailyCodingProblem):
         return funcs[kwargs['func']](kwargs)
 
 
+# Rain Fill-up
 class Problem30(DailyCodingProblem):
     """
     Notes: The original algorithm was missing cases in which your wall does not hold any water -- all the water runs off
@@ -171,6 +230,7 @@ class Problem30(DailyCodingProblem):
     """
 
     def __init__(self):
+        super(Problem30, self).__init__()
         self.difficulty = 'Medium'
 
     def test(self):
@@ -201,14 +261,16 @@ class Problem30(DailyCodingProblem):
         return total
 
 
+# Editing Distance
 class Problem31(DailyCodingProblem):
 
     """
     Notes:
-        This is a dynamic programming problem.
+        > Dynamic Programming
     """
 
     def __init__(self):
+        super(Problem31, self).__init__()
         self.difficulty = 'Easy'
 
     def test(self):
@@ -248,10 +310,11 @@ class Problem31(DailyCodingProblem):
         return edit[-1][-1]
 
 
+# Currency Exchange
 class Problem32(DailyCodingProblem):
 
     def __init__(self):
-        pass
+        super(Problem32, self).__init__()
 
     def test(self):
         raise NotImplementedException
@@ -287,16 +350,17 @@ class Problem32(DailyCodingProblem):
         return False
 
 
+# Running Median
 class Problem33(DailyCodingProblem):
 
     def __init__(self):
-        pass
+        super(Problem33, self).__init__()
 
     def test(self):
         self.execute(arr=[2, 1, 5, 7, 2, 0, 5])
 
     def execute(self, **kwargs):
-        from heapq import heapify, heappop, heappush, _heapify_max, nlargest, nsmallest
+        from heapq import heappop, heappush, _heapify_max, nlargest, nsmallest
 
         arr = kwargs['arr']
 
@@ -329,15 +393,16 @@ class Problem33(DailyCodingProblem):
             print("median={0}\tarr={1}".format(median, less_than_median + greater_than_median))
 
 
+# Insert to make Palidrome
 class Problem34(DailyCodingProblem):
 
     """
     Notes:
-        This is a dynamic programming problem.
+        > Dynamic Programming
     """
 
     def __init__(self):
-        pass
+        super(Problem34, self).__init__()
 
     def test(self):
         self.execute(s='race')
@@ -354,16 +419,24 @@ class Problem34(DailyCodingProblem):
         for i in range(len(s)):
             cache[i][1] = s[i]
 
+        # j denotes the number of characters in the current string
         for j in range(2, len(s) + 1):
+            # i indicates the start of the current string
             for i in range(len(s) - j + 1):
                 term = s[i: i + j]
                 print(term)
+                # Get the first and last character for comparison
                 first, last = term[0], term[-1]
+                # If the two characters are matching then we can just refer to the best palindrome using 2 less
+                # characters and starting at one index ahead
                 if first == last:
                     cache[i][j] = first + cache[i + 1][j - 2] + last
+                # Otherwise use the best palindrome possible using the first/last character only with 1 less character
+                # and possibly at 1 index ahead (depending on first or last)
                 else:
                     one = first + cache[i + 1][j - 1] + first
                     two = last + cache[i][j - 1] + last
+                    # Set based on which is shorter, otherwise use which is lexicologically first
                     if len(one) < len(two):
                         cache[i][j] = one
                     elif len(one) > len(two):
@@ -373,11 +446,15 @@ class Problem34(DailyCodingProblem):
 
                 print(cache)
 
+        # Return the palindrome from the start of the string (index=0) using all characters
+        return cache[0][-1]
 
+
+# RGB
 class Problem35(DailyCodingProblem):
 
     def __init__(self):
-        pass
+        super(Problem35, self).__init__()
 
     def test(self):
         print(self.execute(rgb='GBRRBGRGGGGRBBB'))
@@ -407,6 +484,7 @@ class Problem35(DailyCodingProblem):
         return ''.join(rgb)
 
 
+# Second Largest Node in BST
 class Problem36(DailyCodingProblem):
 
     """
@@ -415,7 +493,7 @@ class Problem36(DailyCodingProblem):
     """
 
     def __init__(self):
-        pass
+        super(Problem36, self).__init__()
 
     def test(self):
         node = BSTNode(0, None, BSTNode(1))
@@ -452,9 +530,11 @@ class Problem36(DailyCodingProblem):
         return val
 
 
+# Subset Permutations
 class Problem37(DailyCodingProblem):
 
     def __init__(self):
+        super(Problem37, self).__init__()
         self.difficulty('Easy')
 
     def test(self):
@@ -476,9 +556,11 @@ class Problem37(DailyCodingProblem):
         return power_set(s)
 
 
+# n-Queens
 class Problem38(DailyCodingProblem):
 
     def __init__(self):
+        super(Problem38, self).__init__()
         self.difficulty = 'Hard'
 
     def test(self):
@@ -521,6 +603,7 @@ class Problem38(DailyCodingProblem):
         return n_queens(kwargs['queens'])
 
 
+# TODO: Conway's Game of Life
 class Problem39(DailyCodingProblem):
 
     """
@@ -529,7 +612,7 @@ class Problem39(DailyCodingProblem):
     """
 
     def __init__(self):
-        pass
+        super(Problem39, self).__init__()
 
     def test(self):
         pass
@@ -538,6 +621,7 @@ class Problem39(DailyCodingProblem):
         pass
 
 
+# Triples Array
 class Problem40(DailyCodingProblem):
 
     """
@@ -552,23 +636,23 @@ class Problem40(DailyCodingProblem):
     """
 
     def __init__(self):
-        pass
+        super(Problem40, self).__init__()
 
     def test(self):
         arr = [1, 1, 1, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5]
         print(self.execute(arr=arr))
 
     def execute(self, **kwargs):
-        INT_SIZE = 32
+        int_size = 32
         appears_once = 0
         arr = kwargs['arr']
-        result = [0 for _ in range(INT_SIZE)]
+        result = [0 for _ in range(int_size)]
 
         for num in arr:
-            for i in range(INT_SIZE):
+            for i in range(int_size):
                 result[i] += num >> i & 1
 
-        for i in range(INT_SIZE):
+        for i in range(int_size):
             result[i] = result[i] % 3
             if result[i] != 0 and result[i] != 1:
                 return "The array should include values that appear trice and only one value which appears once."
@@ -578,6 +662,7 @@ class Problem40(DailyCodingProblem):
         return appears_once
 
 
+# Continuous Intinerary
 class Problem41(DailyCodingProblem):
 
     """
@@ -586,6 +671,7 @@ class Problem41(DailyCodingProblem):
     """
 
     def __init__(self):
+        super(Problem41, self).__init__()
         self.difficulty = 'Medium'
 
     def test(self):
@@ -617,3 +703,468 @@ class Problem41(DailyCodingProblem):
         flights = kwargs['flights']
         current = kwargs['current']
         return build_itinerary(flights, current)
+
+
+# k-Sum Subarray
+class Problem42(DailyCodingProblem):
+
+    def __init__(self):
+        super(Problem42, self).__init__()
+
+    def test(self):
+        arr = [12, 1, 61, 5, 9, 2]
+        k = 24
+        print(self.execute(arr=arr, target=k))
+
+    def execute(self, **kwargs):
+        arr = kwargs['arr']
+        target = kwargs['target']
+        # The question is -- Can we form _ with the first _ values?
+        chart = [[None for _ in range(target + 1)] for _ in range(len(arr) + 1)]
+
+        # How to get k=0? Just pick nothing!
+        for i in range(len(arr) + 1):
+            chart[i][0] = []
+
+        # Starting from k=1 with at least length 1 array
+        for j in range(1, len(arr) + 1):
+            for i in range(1, target + 1):
+                # Get the first element in the arr
+                last = arr[j - 1]
+                # If the current element is greater than the sum then just use the previous subarray since adding this
+                # element will not achieve the wanted sum
+                if last > i:
+                    chart[j][i] = chart[j - 1][i]
+                else:
+                    # Means we can make the current sum without the current value
+                    if chart[j - 1][i] is not None:
+                        chart[j][i] = chart[j - 1][i]
+                    # We might be able to make the sum using the current value, check the difference between the current
+                    # sum and value
+                    elif chart[j - 1][i - last] is not None:
+                        chart[j][i] = chart[j - 1][i - last] + [last]
+                    # We cannot make the sum regardless of the current value, set to None
+                    else:
+                        chart[j][i] = None
+        print(chart)
+        return chart[-1][-1]
+
+
+# Implement a Constant-Time Stack
+class Problem43(DailyCodingProblem):
+
+    def __init__(self):
+        super(Problem43, self).__init__()
+        self.max_stack = []
+        self.stack = []
+
+    def test(self):
+        push_values = [1, 2, 1, 3]
+        pop_values = 1
+        self.execute(push=push_values, pop=pop_values)
+
+    def execute(self, **kwargs):
+        push_values = kwargs['push']
+        pop_values = kwargs['pop']
+
+        for num in push_values:
+            self.push(num)
+
+        assert self.max() == 3
+
+        for _ in range(pop_values):
+            assert self.pop() == 3
+
+        assert self.max() == 2
+
+        print(self.stack, self.max_stack)
+
+    def push(self, value):
+        # The current max is greater than the value you are attempting to push
+        if self.max_stack and self.max_stack[-1] >= value:
+            self.max_stack.append(self.max_stack[-1])
+        # The current max is not greater than the current value or the stack is empty
+        else:
+            self.max_stack.append(value)
+        self.stack.append(value)
+
+    def pop(self):
+        self.max_stack.pop()
+        return self.stack.pop()
+
+    def max(self):
+        return self.max_stack[-1]
+
+
+# Number of Inversions in Array
+class Problem44(DailyCodingProblem):
+
+    """
+    Notes:
+        > Divide & Conquer
+        This can be treated as a merge sort -- whenever the left value is greater than any value on the right there is
+        an inversion. We end up with two sorted subarrays (left, right) in which all elements on the left should be less
+        than that on the right. If we attempt to merge and end up popping a value from the left we have N inversions --
+        where N is the number of elements left in the right subarray yet to be merged.
+    """
+
+    def __init__(self):
+        super(Problem44, self).__init__()
+        self.difficulty = 'Medium'
+
+    def test(self):
+        print(self.count_inversions(arr=[2, 4, 1, 3, 5]))
+
+    def count_inversions(self, **kwargs):
+        arr = kwargs['arr']
+        count, _ = self.count_inversions_helper(arr)
+        return count
+
+    def count_inversions_helper(self, arr):
+        if len(arr) <= 1:
+            return 0, arr
+
+        mid = len(arr) // 2
+        left = arr[:mid]
+        right = arr[mid:]
+        print(left, right)
+        left_count, left_sorted_arr = self.count_inversions_helper(left)
+        right_count, right_sorted_arr = self.count_inversions_helper(right)
+        between_count, sorted_arr = self.merge_and_count(left_sorted_arr, right_sorted_arr)
+
+        return left_count + right_count + between_count, sorted_arr
+
+    @staticmethod
+    def merge_and_count(left, right):
+        count = 0
+        sorted_arr = []
+        i, j = 0, 0
+
+        while i < len(left) and j < len(right):
+            if left[i] < right[j]:
+                sorted_arr.append(left[i])
+                i += 1
+            elif left[i] > right[j]:
+                sorted_arr.append(right[j])
+                count += len(left) - i
+                j += 1
+            sorted_arr.extend(left[i:])
+            sorted_arr.extend(right[j:])
+
+        return count, sorted_arr
+
+    def execute(self, **kwargs):
+        """
+        Notes:
+            This is not the optimal solution less than O(N**2) since in the worst scenario we traverse a completely
+            left-sided BST which is  O(N**2).
+        """
+        arr = kwargs['arr']
+        current_node = BSTNode(arr[0])
+        head = current_node
+        visit = []
+        invert = []
+        result = {}
+
+        for num in arr[1:]:
+            while current_node:
+                # num is less than the current_node in BST
+                if num < current_node.value:
+                    # Visit this node and its right subtree later
+                    visit.append(current_node)
+                    # There are more left values to compare with
+                    if current_node.left:
+                        current_node = current_node.left
+                    # No left value place the num
+                    else:
+                        current_node.left = BSTNode(num)
+                        break
+                # num is greater than or equal to the current_node in BST
+                elif num >= current_node.value:
+                    # Keep going to the right until we find a value it is less than or place it
+                    if current_node.right:
+                        current_node = current_node.right
+                    else:
+                        current_node.right = BSTNode(num)
+                        break
+
+            current_node = head
+
+            for node in visit:
+                invert += self.get_right_subtree(node)
+
+            result[num] = invert
+            visit = []
+            invert = []
+
+        return result
+
+
+    @staticmethod
+    def get_right_subtree(node):
+        li = [node.value]
+        if node.right:
+            visit = [node.right]
+        else:
+            visit = []
+
+        while visit:
+            li += [visit[0].value]
+            if visit[0].left:
+                li.append(visit[0].left)
+            if visit[0].right:
+                li.append(visit[0].right)
+            visit.pop(0)
+
+        return li
+
+
+# Implement rand7 using rand5
+class Problem45(DailyCodingProblem):
+
+    """
+    Notes:
+        Get a range that includes an even number of multiple of 7, we can truncate some values to make it even. For
+        example, if we can get a [1, 25] range then we can truncate [22, 25] if they appear and only return when we
+        have [1, 21] to use modulo 7 on.
+    """
+
+    def __init__(self):
+        super(Problem45, self).__init__()
+
+    def test(self):
+        self.test_rand()
+
+    @staticmethod
+    def test_rand():
+        k = 5
+
+        for i in range(k):
+            for j in range(k):
+                print(3 * i + j + 1)
+
+    def execute(self, **kwargs):
+
+        def rand5():
+            from random import uniform
+            return uniform(1, 5)
+
+        # (5 - 25) + (1 - 5) - 5
+        # This yields a number from 1 - 25
+        num = 5 * rand5() + rand5() - 5
+
+        while num > 21:
+            num = 5 * rand5() + rand5() - 5
+
+        return num % 7
+
+
+# Longest Palindromic Substring
+class Problem46(DailyCodingProblem):
+
+    """
+    Notes:
+        > Dynamic Programming
+    """
+
+    def __init__(self):
+        super(Problem46, self).__init__()
+        self.difficulty = 'Hard'
+
+    def test(self):
+        s = 'anabbbbbbbb'
+        print("s={0}, longest_palindrome={1}".format(s, self.execute(s=s)))
+
+    def execute(self, **kwargs):
+        s = kwargs['s']
+        n = len(s)
+        A = [[1 if i == j else 0 for i in range(n)] for j in range(n)]
+
+        for j in range(n):
+            for i in reversed(range(j + 1)):
+                # Single character is considered a palindrome of length 1
+                if i == j:
+                    A[i][j] = 1
+                # The two characters at the ends are equal, therefore we can just check the previous
+                elif s[i] == s[j]:
+                    # Our palindrome is as long the best palindrome we can get without the two end characters
+                    A[i][j] = 2 + A[i + 1][j - 1]
+                # Otherwise we do not have a palindrome and the best we can do is the best from not having either or
+                # end characters
+                else:
+                    # No last character, no first character, no first and last character
+                    A[i][j] = max(A[i][j - 1], A[i + 1][j], A[i + 1][j - 1])
+
+        return A[0][-1]
+
+
+# Maximum Stock Profit
+class Problem47(DailyCodingProblem):
+
+    def __init__(self):
+        super(Problem47, self).__init__()
+        self.difficulty = 'Easy'
+
+    def test(self):
+        stocks = [999, 2, 10, 99, 1, 7, 100, 50, 22, 6]
+        print(self.execute(stocks=stocks))
+
+    @staticmethod
+    def search(arr, op):
+        ret = None
+
+        if len(arr) < 1:
+            return None, None
+
+        for index, num in enumerate(arr):
+            if ret is None or op(ret[1], num):
+                ret = (index, num)
+
+        return ret
+
+    def execute(self, **kwargs):
+        from operator import lt, gt
+        stocks = kwargs['stocks']
+
+        # Search for the smallest and largest elements
+        l_index, largest = self.search(stocks, lt)
+        s_index, smallest = self.search(stocks, gt)
+
+        # Search before/after for the smallest/largest to maximize difference (profit)
+        _, left_smallest = self.search(stocks[:l_index], gt)
+        _, right_largest = self.search(stocks[s_index + 1:], lt)
+
+        # Do a small check here in one of the cases in which the maximums are at the edges
+        if left_smallest is None:
+            return right_largest - smallest
+        if right_largest is None:
+            return largest - left_smallest
+
+        # Return the larger profit of the two
+        ret1 = largest - left_smallest
+        ret2 = right_largest - smallest
+
+        return ret1 if ret1 > ret2 else ret2
+
+
+# Reproduce Tree given Pre/In-order
+class Problem48(DailyCodingProblem):
+
+    """
+    Notes:
+        > Recursive
+    """
+
+    def __init__(self):
+        super(Problem48, self).__init__()
+        self.difficulty = 'Medium'
+
+    def test(self):
+        pass
+
+    def execute(self, **kwargs):
+        inorder = kwargs['inorder']
+        preorder = kwargs['preorder']
+
+        if len(preorder) == 0 and len(inorder) == 0:
+            return None
+        elif len(preorder) == len(inorder) == 1:
+            return TreeNode(value=preorder[0])
+
+        root = TreeNode(value=preorder[0])
+        mid_index = inorder.index(root.value)
+        """
+        Simply extract the root value and pass the corresponding sides to the function recursively to build each side
+            inorder:  | left | root | right |
+            preorder: | root | left | right |
+        """
+        root.left = self.execute(inorder=inorder[:mid_index], preorder=preorder[1: mid_index + 1])
+        root.right = self.execute(inorder=inorder[mid_index + 1:], preorder=preorder[mid_index + 1:])
+
+
+# Largest Continuous Subarray
+class Problem49(DailyCodingProblem):
+
+    def __init__(self):
+        super(Problem49, self).__init__()
+        self.difficulty = 'Medium'
+
+    def test(self):
+        arr = [1, 2, 3, 4, -10, 99, -1, 1000]
+        print("arr={0}, best={1}".format(arr, self.execute(arr=arr)))
+
+    def execute(self, **kwargs):
+        arr = kwargs['arr']
+        best, total = 0, 0
+
+        for num in arr:
+            if total + num <= 0:
+                if total > best:
+                    best = total
+                total = 0
+
+            else:
+                total += num
+
+        if total > best:
+            return total
+
+        return best
+
+
+# Operation Tree
+class Problem50(DailyCodingProblem):
+
+    def __init__(self):
+        super(Problem50, self).__init__()
+        self.difficulty = 'Easy'
+
+    def test(self):
+        root = TreeNode(value='+',
+                        left=TreeNode(value='*',
+                                      left=TreeNode(value=2),
+                                      right=TreeNode(value=3)),
+                        right=TreeNode(value=5))
+        print("Result: {}".format(self.execute(root=root)))
+
+    def execute(self, **kwargs):
+        from operator import add, sub, mul, truediv, mod, xor
+
+        def get_operator(op_string):
+            try:
+                return {
+                    '+': add,
+                    '-': sub,
+                    '*': mul,
+                    '/': truediv,
+                    '%': mod,
+                    '^': xor,
+                }[op_string]
+            except KeyError:
+                return False
+
+        root = kwargs['root']
+        op = get_operator(root.value)
+
+        if op:
+            return op(self.execute(root=root.left), self.execute(root=root.right))
+        else:
+            return root.value
+
+
+class Problem51(DailyCodingProblem):
+
+    def __init__(self):
+        pass
+
+    def test(self):
+        pass
+
+    def execute(self, **kwargs):
+        from random import randint
+        cards = kwargs['cards']
+        n = len(cards)
+
+        for i in range(n - 1):
+            j = randint(i, n - 1)
+            cards[i], cards[j] = cards[j], cards[i]

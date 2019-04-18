@@ -1,9 +1,10 @@
 from exercises.daily_coding_problems import *
+from exercises.book_problems import *
 
 
 if __name__ == "__main__":
 
-    p = Problem40()
+    p = Book_20_1()
     p.test()
 
     def _printing_portion():
